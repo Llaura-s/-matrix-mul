@@ -4,9 +4,9 @@ using namespace std;
 using namespace std::chrono;
 struct Matrix
 {
-	int rows;
-	int cols;
-	float *ele;
+	int rows;                    //行数
+	int cols;                      //列数
+	float *ele;                   //元素数据
  };
  Matrix multiplication(Matrix a,Matrix b)
  {
@@ -16,7 +16,7 @@ struct Matrix
  	c.ele=new float[c.rows*c.cols]();
  	if(a.cols!=b.rows)                      
  	{
- 		cout<<"error!"<<endl;
+ 		cout<<"error!"<<endl;           //报错
  		return c;
 	}
 	else
