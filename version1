@@ -1,0 +1,80 @@
+#include<iostream>
+#include<chrono>
+using namespace std;
+using namespace std::chrono;
+struct Matrix
+{
+	int rows;
+	int cols;
+	float *ele;
+ };
+ Matrix multiplication(Matrix a,Matrix b)
+ {
+ 	Matrix c={0,0};
+ 	c.rows=a.rows;
+ 	c.cols=b.cols;
+ 	c.ele=new float[c.rows*c.cols]();
+ 	if(a.cols!=b.rows)                      
+ 	{
+ 		cout<<"error!"<<endl;
+ 		return c;
+	}
+	else
+	{
+	    for(int k=0;k<a.rows;k++)
+	 	{
+	 		for(int j=0;j<b.cols;j++)
+	 		{
+	 			for(int i=0;i<a.cols;i++)
+	 			{
+	 				c.ele[j + a.rows* k] += a.ele[i+a.cols* k] * b.ele[j + b.cols* i];
+				} 
+			}
+		 } 
+		 return c;
+	 }
+ }
+ int main()
+ {
+ 	Matrix mata;
+ 	Matrix matb;
+ 	Matrix matc;
+ 	cout<<"enter the number of rows of matrix a(left): "<<endl;                    //输入左矩阵a行列数 
+ 	cin>>mata.rows;
+ 	cout<<"enter the number of columns of matrix a(left): "<<endl;
+ 	cin>>mata.cols;
+ 	mata.ele=new float [mata.rows*mata.cols]();
+ 	cout<<"enter the number of rows of matrix b(right): "<<endl;                  //输入右矩阵b行列数 
+ 	cin>>matb.rows;
+ 	cout<<"enter the number of columns of matrix b(right): "<<endl;               
+ 	cin>>matb.cols;
+ 	matb.ele=new float [matb.rows*matb.cols]();                               
+ 	for(int i=0;i<mata.rows*mata.cols;i++)                                         //输入左矩阵的元素
+ 	{
+ 		cout<<"enter the element(matrix a)"<<"NO."<<i+1<<":"<<endl;
+ 		cin>>mata.ele[i];
+	 }                                                                     
+	 for(int i=0;i<matb.rows*matb.cols;i++)                                      //输入右矩阵的元素 
+	 {
+	 	cout<<"enter the element(matrix b)"<<"NO."<<i+1<<":"<<endl;
+	 	cin>>matb.ele[i];
+	 }                                                                   
+	 auto start = system_clock::now();                                           //开始计时 
+	 matc=multiplication(mata,matb);
+	 auto end   = system_clock::now();                                                //结束计时 
+     auto duration = duration_cast<seconds>(end - start);
+       cout << "time:"  << double(duration.count()) * seconds::period::num / seconds::period::den 
+     << "s" << endl;                                                                     //输出运行时间 
+	 for (int i = 0; i < matc.rows; i++) 
+	{
+        for (int j = 0; j < matc.cols; j++) 
+		{
+            cout << matc.ele[i *matc.cols + j] << " ";
+        }
+        cout <<endl;
+    }
+	 delete []mata.ele;
+	 delete []matb.ele;
+	 delete []matc.ele;
+	 return 0; 	
+ }
