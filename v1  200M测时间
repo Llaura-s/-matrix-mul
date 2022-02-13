@@ -1,8 +1,8 @@
 #include<iostream>
 #include<chrono>
-#define A 200000000 // 左矩阵的元素个数（测试参数） 
-#define B 200000000 // 右矩阵的元数个数（测试参数） 
-#define C 40000 // 结果矩阵的元素个数（测试参数） 
+#define A 200000000 // 测试参数 
+#define B 200000000  
+#define C 10000 
 using namespace std;
 using namespace std::chrono;
 struct Matrix
@@ -16,7 +16,7 @@ struct Matrix
  	Matrix c={0,0};
  	c.rows=a.rows;
  	c.cols=b.cols;
- 	c.ele=new float[c.rows*c.cols]();
+ 	c.ele=new float[c.rows*c.cols]();                     //申请动态内存并初始化
  	if(a.cols!=b.rows)                      
  	{
  		cout<<"error!"<<endl;
@@ -34,37 +34,37 @@ struct Matrix
 				} 
 			}
 		 } 
-		 return c;
-	 }
- }
+	   return c;
+	 }delete []c.ele;                         //释放内存
+ }    	
  int main()
  {
  	Matrix mata;
  	Matrix matb;
  	Matrix matc;
-	mata.rows=100;                                   //设定测试参数
+	mata.rows=100;                                   //测试参数
 	mata.cols=2000000;
 	matb.rows=2000000;
 	matb.cols=100; 
-	mata.ele=new float [A]();                      //申请内存并初始化 
+	mata.ele=new float [A]();                      
 	matb.ele=new float [B]();
 	matc.ele=new float [C]();
-	mata.ele[0]=2;                                   //设定测试参数 
-    matb.ele[0]=2;                             
-    auto start = system_clock::now();                                           //开始计时 
+	mata.ele[0]=2;                                   
+        matb.ele[0]=2;                             
+        auto start = system_clock::now();                                           //开始计时 
 	matc=multiplication(mata,matb);
-    auto end   = system_clock::now();                                                //结束计时 
-    auto duration = duration_cast<seconds>(end - start);
-    cout << "time:"  << double(duration.count()) * seconds::period::num / seconds::period::den 
-     << "s" << endl;                                                                     //输出运行时间 
-	 for (int i = 0; i < matc.rows; i++) 
+        auto end   = system_clock::now();                                                //结束计时 
+        auto duration = duration_cast<seconds>(end - start);
+        cout << "time:"  << double(duration.count()) * seconds::period::num / seconds::period::den 
+              << "s" << endl;                                                                     //输出运行时间 
+        for (int i = 0; i < matc.rows; i++) 
 	{
-        for (int j = 0; j < matc.cols; j++) 
-		{
-            cout << matc.ele[i *matc.cols + j] << " ";
-        }
+            for (int j = 0; j < matc.cols; j++) 
+	    {
+               cout << matc.ele[i *matc.cols + j] << " ";
+            }
         cout <<endl;
-    }
+        }
 	 delete []mata.ele;
 	 delete []matb.ele;
 	 delete []matc.ele;
