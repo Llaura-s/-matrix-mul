@@ -1,0 +1,74 @@
+#include<iostream>
+#include<chrono>
+#define A 200000000// 左矩阵的元素个数（测试参数） 
+#define B 200000000 // 右矩阵的元数个数（测试参数） 
+#define C 10000 // 结果矩阵的元素个数（测试参数） 
+using namespace std;
+using namespace std::chrono;
+struct Matrix
+{
+	int rows;
+	int cols;
+	float* ele;
+ };
+void multiplication(Matrix* pa, Matrix* pb, Matrix* pc)
+{
+	pc->rows = pa->rows;
+	pc->cols = pb->cols;
+	pc->ele = new float[C]();                               //申请动态内存并初始化
+	if (pa->cols != pb->rows)
+	{
+		cout<<"error!" <<endl;
+	}
+	else
+	{
+		for (int k = 0; k < pa->rows; ++k)
+		{
+			for (int j = 0; j < pb->cols; ++j)
+			{
+				for (int i = 0; i < pa->cols; ++i)
+				{
+					pc->ele[j + pa->rows * k] += pa->ele[i + pa->cols * k] * pb->ele[j + pb->cols * i];
+				
+				
+				}
+			}
+		}
+	} 
+}
+int main()
+{
+    Matrix a;
+ 	Matrix b;
+ 	Matrix c;   
+	Matrix* pa= &a;                          //结构体指针初始化 
+	Matrix* pb= &b;
+	Matrix* pc= &c;
+	pa->rows=100;                                   //测试参数
+	pa->cols=2000000;
+	pb->rows=2000000;
+	pb->cols=100; 
+	pa->ele=new float [A]();                     
+	pb->ele=new float [B]();
+	pc->ele=new float [C]();
+	pa->ele[0]=2;                                 
+    pb->ele[0]=2;    
+	auto start = system_clock::now();                                           //开始计时 
+	multiplication(pa,pb,pc);
+    auto end   = system_clock::now();                                                //结束计时 
+    auto duration = duration_cast<microseconds>(end - start);
+    cout << "time:"  << double(duration.count()) * microseconds::period::num / microseconds::period::den 
+     << "s" << endl;                                                                     //输出运行时间 
+	 for (int i = 0; i < pc->rows; i++) 
+	{
+        for (int j = 0; j < pc->cols; j++) 
+		{
+            cout << pc->ele[i * pc->cols + j] << " ";
+        }
+        cout <<endl;
+    }
+	 delete []pa->ele;
+	 delete []pb->ele;
+	 delete []pc->ele;
+	 return 0; 	
+ }
